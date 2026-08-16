@@ -1,0 +1,33 @@
+<svg width="320" height="320" viewBox="0 0 320 320" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="ssGrad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#ff7b7b" />
+      <stop offset="100%" stop-color="#f14d5d" />
+    </linearGradient>
+  </defs>
+  <rect x="24" y="24" width="272" height="272" rx="96" fill="url(#ssGrad)" />
+  <text
+    x="160"
+    y="168"
+    text-anchor="middle"
+    font-family="Space Grotesk, Manrope, Arial, sans-serif"
+    font-size="112"
+    font-weight="700"
+    fill="#ffffff"
+    letter-spacing="-4"
+  >
+    SS
+  </text>
+  <text
+    x="160"
+    y="216"
+    text-anchor="middle"
+    font-family="Manrope, Arial, sans-serif"
+    font-size="20"
+    font-weight="600"
+    fill="#ffe6ea"
+    letter-spacing="2.4"
+  >
+    SCHOLAR SHAYATA
+  </text>
+</svg>
