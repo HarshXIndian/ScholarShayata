@@ -40,15 +40,18 @@
           <a href="index.html#home">Home</a>
           <a href="index.html#categories">Skills</a>
           <a class="active" href="courses.html">All Courses</a>
-          <a href="one-to-one.html">1-on-1 Classes</a>
           <a href="index.html#impact">Impact</a>
           <a href="#" data-dialog-open="about-dialog">About</a>
           <a href="#" data-dialog-open="contact-dialog">Contact</a>
         </nav>
 
         <div class="nav-actions">
-          <a class="ghost-btn is-disabled" href="#" aria-disabled="true">Log In</a>
-          <a class="solid-btn is-disabled" href="#" aria-disabled="true">Student Login</a>
+          <a class="ghost-btn is-disabled" href="#" aria-disabled="true"
+            >Log In</a
+          >
+          <a class="solid-btn is-disabled" href="#" aria-disabled="true"
+            >Student Login</a
+          >
         </div>
       </div>
     </header>
@@ -107,10 +110,8 @@
     <footer class="site-footer" id="contact">
       <section class="newsletter">
         <div class="container newsletter-panel">
-          <h2>
-            Get new course drops, wishlist updates, and discount alerts.
-          </h2>
-          <form action="#" method="post">
+          <h2>Get new course drops, wishlist updates, and discount alerts.</h2>
+          <form action="#" method="post" data-unavailable-form>
             <input
               type="email"
               placeholder="Enter your email"
@@ -214,11 +215,14 @@
         </div>
 
         <h2 id="about-dialog-title">About ScholarShayata</h2>
-        <p>First of all, thanks to Lord Krishna for giving me this idea and direction.</p>
+        <p>
+          First of all, thanks to Lord Krishna for giving me this idea and
+          direction.
+        </p>
         <p>
           I am Harsh Indian, an educator at Hartron, and I created
-          ScholarShayata for students who want to learn and improve their
-          skills but cannot afford high-priced courses.
+          ScholarShayata for students who want to learn and improve their skills
+          but cannot afford high-priced courses.
         </p>
         <p>
           While teaching, I kept seeing the same problem again and again:
@@ -245,9 +249,9 @@
           direction over time.
         </p>
         <p>
-          In simple words: if taking from others is wrong, then exploitation
-          and fraud against students is also wrong. This platform exists to
-          protect learners and make skill education more reachable.
+          In simple words: if taking from others is wrong, then exploitation and
+          fraud against students is also wrong. This platform exists to protect
+          learners and make skill education more reachable.
         </p>
       </div>
     </div>
@@ -404,7 +408,7 @@
           </fieldset>
 
           <label class="form-field" data-contact-field="email">
-            <span>Email Address</span>
+            <span>Email Address *</span>
             <input
               type="email"
               name="email"

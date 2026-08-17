@@ -151,38 +151,152 @@ window.courseCatalog = [
   },
   {
     id: 3,
-    title: "Free Notes Pack: C++, Python, DSA & HTML",
+    title: "Handwritten Notes Library",
     instructor: "ScholarShayata",
     category: "Notes",
-    duration: "Self-paced",
+    duration: "Choose any notes",
     price: 0,
-    priceLabel: "Free",
-    mrpLabel: "Sign up required",
+    priceLabel: "Free Request",
+    mrpLabel: "Source credit included",
     image:
       "https://cdn.pixabay.com/photo/2017/06/09/07/37/notebook-2386034_640.jpg",
-    tag: "Free Notes",
+    tag: "Handwritten Notes",
     description:
-      "Concise revision notes for C++, Python, DSA in C++ and HTML. Sign up to unlock.",
+      "Select the handwritten notes you need and share your email or WhatsApp number. Source credits are shown wherever available; the goal is learning support, not earning from someone else's work.",
     details: {
       outcomes: [
-        "Quickly revise key concepts with clean notes.",
-        "Get topic-wise summaries for interviews and exams.",
-        "Use checklists to track daily practice.",
+        "Choose only the notes you actually need.",
+        "Get revision-friendly handwritten material for programming and web development.",
+        "See source credits wherever a source name is available.",
+        "Request delivery through email or WhatsApp.",
       ],
-      tools: ["C++", "Python", "DSA in C++", "HTML"],
-      projects: ["Daily revision plan", "Topic-wise practice list"],
+      tools: [
+        "C",
+        "C++",
+        "Python",
+        "HTML",
+        "CSS",
+        "JavaScript",
+        "Java",
+        "DSA",
+        "React.js",
+        "Node.js",
+        "Express.js",
+        "MongoDB",
+        "SQL",
+        "OOPs",
+      ],
+      projects: [
+        "Personal revision bundle",
+        "Topic-wise notes selection",
+        "Interview and exam quick-revision pack",
+      ],
       modules: [
         {
-          title: "C++ & DSA Notes",
-          topics: ["C++ basics", "STL quick guide", "Core DSA patterns"],
+          title: "Programming Foundation Notes",
+          topics: ["C", "C++", "Python", "Java", "OOPs"],
         },
         {
-          title: "Python Notes",
-          topics: ["Syntax cheatsheets", "Functions & OOP", "Common patterns"],
+          title: "Web Development Notes",
+          topics: ["HTML", "CSS", "JavaScript", "React.js", "Node.js"],
         },
         {
-          title: "HTML Notes",
-          topics: ["Semantic HTML", "Forms", "Layouts & best practices"],
+          title: "Backend and Database Notes",
+          topics: ["Express.js", "MongoDB", "SQL"],
+        },
+        {
+          title: "DSA and Interview Revision",
+          topics: ["DSA notes", "Problem-solving revision", "Quick recap"],
+        },
+      ],
+      notes: [
+        {
+          title: "C++ Complete Handwritten Notes",
+          source: "Coders.World",
+        },
+        {
+          title: "C++ Notes",
+          source: "",
+        },
+        {
+          title: "C Handwritten Notes",
+          source: "",
+        },
+        {
+          title: "Complete Python Handwritten Notes",
+          source: "codewithcurious.com",
+        },
+        {
+          title: "CSS Notes",
+          source: "",
+        },
+        {
+          title: "DSA Notes",
+          source: "",
+        },
+        {
+          title: "Express.js",
+          source: "",
+        },
+        {
+          title: "Express.js Handwritten Notes",
+          source: "TopperWorld",
+        },
+        {
+          title: "HTML Handwritten Notes",
+          source: "CodersWorld",
+        },
+        {
+          title: "Java Fundamentals Notes",
+          source: "",
+        },
+        {
+          title: "Java Handwritten Notes",
+          source: "",
+        },
+        {
+          title: "Java Notes",
+          source: "",
+        },
+        {
+          title: "JS Fundamentals",
+          source: "ToppersWorld",
+        },
+        {
+          title: "JS Handwritten Notes",
+          source: "CodersWorld",
+        },
+        {
+          title: "JS Intro",
+          source: "",
+        },
+        {
+          title: "MongoDB Handwritten Notes",
+          source: "CodersWorld",
+        },
+        {
+          title: "Node.js Handwritten Notes",
+          source: "ToppersWorld",
+        },
+        {
+          title: "OOPs Handwritten Notes",
+          source: "",
+        },
+        {
+          title: "React.js Handwritten Notes",
+          source: "",
+        },
+        {
+          title: "SQL Zero to Hero Notes",
+          source: "programmer_girl__",
+        },
+        {
+          title: "SQL Notes",
+          source: "",
+        },
+        {
+          title: "DSA Notes",
+          source: "Atul Kumar",
         },
       ],
     },

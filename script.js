@@ -4,22 +4,30 @@ const year = document.querySelector("#year");
 const counters = document.querySelectorAll(".count-up");
 const dialogs = document.querySelectorAll("[data-dialog]");
 const contactForm = document.querySelector("[data-contact-form]");
-const contactDialogTitle = document.querySelector("[data-contact-dialog-title]");
-const contactFormTitleInput = document.querySelector("[data-contact-form-title]");
+const contactDialogTitle = document.querySelector(
+  "[data-contact-dialog-title]",
+);
+const contactFormTitleInput = document.querySelector(
+  "[data-contact-form-title]",
+);
 const contactRequestTypeInput = document.querySelector(
-  "[data-contact-request-type]"
+  "[data-contact-request-type]",
 );
 const contactCourseTitleInput = document.querySelector("[data-course-title]");
 const contactCoursePriceInput = document.querySelector("[data-course-price]");
-const contactPaymentMethodInput = document.querySelector("[data-payment-method]");
+const contactPaymentMethodInput = document.querySelector(
+  "[data-payment-method]",
+);
 const featuredCoursesGrid = document.querySelector("[data-featured-courses]");
 const courseDetailsDialog = document.querySelector(
-  '[data-dialog="course-details-dialog"]'
+  '[data-dialog="course-details-dialog"]',
 );
-const courseDetailsContent = document.querySelector("[data-course-dialog-content]");
+const courseDetailsContent = document.querySelector(
+  "[data-course-dialog-content]",
+);
 const courseDetailsTitle = document.querySelector("#course-details-title");
 const courseDetailsSubtitle = document.querySelector(
-  "[data-course-dialog-subtitle]"
+  "[data-course-dialog-subtitle]",
 );
 const courseCatalog = Array.isArray(window.courseCatalog)
   ? window.courseCatalog
@@ -28,7 +36,6 @@ const courseCatalog = Array.isArray(window.courseCatalog)
 let activeDialog = null;
 const EMAILJS_SERVICE_ID = "service_5xb7nfk";
 const EMAILJS_TEMPLATE_ID = "template_79ynf38";
-const EMAILJS_PAYMENT_TEMPLATE_ID = "template_z2gsmr9";
 const EMAILJS_PUBLIC_KEY = "QiezyPTWzynbAWbeW";
 const UPI_ID = "9518816505-2@ybl";
 const UPI_RECEIVER_NAME = "ScholarShayata";
@@ -193,7 +200,7 @@ const renderFeaturedCourses = (sourceCourses = courseCatalog) => {
   featuredCoursesGrid.innerHTML = [
     ...featuredCourses.map((course) => renderCourseCard(course)),
     ...Array.from({ length: placeholders }, (_, index) =>
-      renderPlaceholderCard(index)
+      renderPlaceholderCard(index),
     ),
   ].join("");
 };
@@ -201,14 +208,16 @@ const renderFeaturedCourses = (sourceCourses = courseCatalog) => {
 renderFeaturedCourses();
 
 const filterFeaturedCoursesByTopic = (topic) => {
-  const keyword = String(topic || "").trim().toLowerCase();
+  const keyword = String(topic || "")
+    .trim()
+    .toLowerCase();
   if (!keyword) {
     renderFeaturedCourses();
     return;
   }
 
   const filtered = courseCatalog.filter((course) =>
-    buildCourseSearchText(course).includes(keyword)
+    buildCourseSearchText(course).includes(keyword),
   );
 
   if (filtered.length === 0) {
@@ -296,7 +305,7 @@ if (counters.length > 0) {
         }
       });
     },
-    { threshold: 0.35 }
+    { threshold: 0.35 },
   );
 
   counters.forEach((counter) => observer.observe(counter));
@@ -330,7 +339,7 @@ const openDialog = (dialogName) => {
   if (dialogForm) {
     dialogForm.reset();
     const defaultMethod = dialogForm.querySelector(
-      'input[name="contact_method"][value="email"]'
+      'input[name="contact_method"][value="email"]',
     );
     const emailField = dialogForm.querySelector('[data-contact-field="email"]');
     const phoneField = dialogForm.querySelector('[data-contact-field="phone"]');
@@ -367,7 +376,11 @@ const detailsByTrack = {
     modules: [
       {
         title: "Module 1: Foundations",
-        topics: ["Semantic HTML", "CSS layout systems", "JavaScript essentials"],
+        topics: [
+          "Semantic HTML",
+          "CSS layout systems",
+          "JavaScript essentials",
+        ],
       },
       {
         title: "Module 2: Components and State",
@@ -498,7 +511,12 @@ const detailsByTrack = {
       "Build revision strategy with timed practice.",
       "Track weak areas and improve performance steadily.",
     ],
-    tools: ["Practice sheets", "Mock tests", "Formula maps", "Revision tracker"],
+    tools: [
+      "Practice sheets",
+      "Mock tests",
+      "Formula maps",
+      "Revision tracker",
+    ],
     projects: [
       "Weekly mock test tracker",
       "Personal formula handbook",
@@ -526,7 +544,12 @@ const detailsByTrack = {
       "Build confidence in group discussions.",
       "Develop a practical job-readiness communication system.",
     ],
-    tools: ["Interview scripts", "Speaking drills", "Resume templates", "GD tasks"],
+    tools: [
+      "Interview scripts",
+      "Speaking drills",
+      "Resume templates",
+      "GD tasks",
+    ],
     projects: [
       "Interview answer bank",
       "Professional email toolkit",
@@ -616,7 +639,8 @@ const getTrackDetails = (course) => {
   if (categoryText.includes("exam")) return detailsByTrack.prep;
   if (categoryText.includes("coding")) return detailsByTrack.prep;
   if (categoryText.includes("career")) return detailsByTrack.communication;
-  if (categoryText.includes("communication")) return detailsByTrack.communication;
+  if (categoryText.includes("communication"))
+    return detailsByTrack.communication;
   if (categoryText.includes("notes")) return detailsByTrack.notes;
   return detailsByTrack.default;
 };
@@ -632,7 +656,7 @@ const renderModuleList = (modules) =>
         <h4>${index + 1}. ${escapeHtml(module.title)}</h4>
         <p>${escapeHtml(module.topics.join(" | "))}</p>
       </article>
-    `
+    `,
     )
     .join("");
 
@@ -652,7 +676,7 @@ const setCourseWizardStep = (nextStep) => {
 
   const clampedStep = Math.max(
     0,
-    Math.min(Number(nextStep), COURSE_WIZARD_TOTAL_STEPS - 1)
+    Math.min(Number(nextStep), COURSE_WIZARD_TOTAL_STEPS - 1),
   );
   courseWizardStep = clampedStep;
   wizard.style.setProperty("--wizard-step", String(clampedStep));
@@ -833,7 +857,7 @@ const renderCourseDetailsDialog = (course) => {
               ${
                 showSavings
                   ? `<p class="course-savings">You save &#8377;${formatAmount(
-                      savings
+                      savings,
                     )}</p>`
                   : ""
               }
@@ -1071,7 +1095,7 @@ const renderCourseDetailsDialog = (course) => {
 
 const openCourseDialog = (courseId) => {
   const selectedCourse = courseCatalog.find(
-    (course) => String(course.id) === String(courseId)
+    (course) => String(course.id) === String(courseId),
   );
   if (!selectedCourse || !courseDetailsDialog) return;
   renderCourseDetailsDialog(selectedCourse);
@@ -1139,7 +1163,7 @@ document.addEventListener("click", (event) => {
   if (purchaseButton instanceof HTMLElement) {
     const courseId = purchaseButton.dataset.purchaseCourse;
     const selectedCourse = courseCatalog.find(
-      (course) => String(course.id) === String(courseId)
+      (course) => String(course.id) === String(courseId),
     );
     event.preventDefault();
     setContactDialogContext({
@@ -1152,14 +1176,13 @@ document.addEventListener("click", (event) => {
     openDialog("contact-dialog");
 
     const contactMessage = document.querySelector(
-      '[data-dialog="contact-dialog"] [data-contact-message]'
+      '[data-dialog="contact-dialog"] [data-contact-message]',
     );
     if (contactMessage && selectedCourse) {
       contactMessage.textContent = `Selected course: ${selectedCourse.title}. Share your contact details to continue purchase.`;
       contactMessage.classList.remove("success", "error");
     }
   }
-
 });
 
 if (dialogs.length > 0) {
@@ -1197,7 +1220,7 @@ if (dialogs.length > 0) {
 
 if (contactForm) {
   const methodRadios = contactForm.querySelectorAll(
-    'input[name="contact_method"]'
+    'input[name="contact_method"]',
   );
   const emailField = contactForm.querySelector('[data-contact-field="email"]');
   const phoneField = contactForm.querySelector('[data-contact-field="phone"]');
@@ -1338,7 +1361,7 @@ if (contactForm) {
 
       contactForm.reset();
       const defaultMethod = contactForm.querySelector(
-        'input[name="contact_method"][value="email"]'
+        'input[name="contact_method"][value="email"]',
       );
       if (defaultMethod) {
         defaultMethod.checked = true;
@@ -1347,7 +1370,9 @@ if (contactForm) {
     } catch (error) {
       if (message) {
         message.textContent =
-          error?.text || error?.message || "Something went wrong. Please try again.";
+          error?.text ||
+          error?.message ||
+          "Something went wrong. Please try again.";
         message.classList.remove("success");
         message.classList.add("error");
       }
@@ -1448,8 +1473,10 @@ document.addEventListener("submit", (event) => {
     const selectedMethod =
       target.querySelector('input[name="upi_contact_method"]:checked')?.value ||
       "email";
-    const emailValue = target.querySelector('input[name="upi_email"]')?.value || "";
-    const phoneValue = target.querySelector('input[name="upi_phone"]')?.value || "";
+    const emailValue =
+      target.querySelector('input[name="upi_email"]')?.value || "";
+    const phoneValue =
+      target.querySelector('input[name="upi_phone"]')?.value || "";
     const contactValue = selectedMethod === "phone" ? phoneValue : emailValue;
     const upiLink = buildUpiLink(courseTitle, coursePrice);
     const messageSubject = `UPI Payment Request - ${courseTitle}`;

@@ -33,6 +33,14 @@ if (allCoursesGrid) {
     return matched ? Number(matched[0]) : 0;
   };
 
+  const getCourseNotes = (course) =>
+    Array.isArray(course?.details?.notes) ? course.details.notes : [];
+
+  const buildNotesSearchText = (course) =>
+    getCourseNotes(course)
+      .map((note) => `${note.title || ""} ${note.source || ""}`)
+      .join(" ");
+
   const categories = [
     "All",
     ...new Set(allCoursesCatalog.map((course) => course.category)),
@@ -45,7 +53,9 @@ if (allCoursesGrid) {
   }
 
   const initialQuery =
-    queryParams.get("q") || queryParams.get("query") || queryParams.get("search");
+    queryParams.get("q") ||
+    queryParams.get("query") ||
+    queryParams.get("search");
   if (initialQuery) {
     state.query = initialQuery.trim().toLowerCase();
   }
@@ -133,13 +143,16 @@ if (allCoursesGrid) {
 
     if (state.query) {
       processed = processed.filter((course) => {
-        const searchableText = `${course.title} ${course.instructor} ${course.category} ${course.description}`.toLowerCase();
+        const searchableText =
+          `${course.title} ${course.instructor} ${course.category} ${course.description} ${buildNotesSearchText(course)}`.toLowerCase();
         return searchableText.includes(state.query);
       });
     }
 
     if (state.category !== "All") {
-      processed = processed.filter((course) => course.category === state.category);
+      processed = processed.filter(
+        (course) => course.category === state.category,
+      );
     }
 
     switch (state.sortBy) {
@@ -151,7 +164,8 @@ if (allCoursesGrid) {
         break;
       case "duration-high":
         processed.sort(
-          (a, b) => parseDurationWeeks(b.duration) - parseDurationWeeks(a.duration)
+          (a, b) =>
+            parseDurationWeeks(b.duration) - parseDurationWeeks(a.duration),
         );
         break;
       case "newest":
@@ -196,12 +210,13 @@ if (allCoursesGrid) {
     allCoursesGrid.innerHTML = [
       ...visibleCourses.map(renderCourseCard),
       ...Array.from({ length: placeholderSlots }, (_, index) =>
-        renderPlaceholderCard(index)
+        renderPlaceholderCard(index),
       ),
     ].join("");
 
     if (loadMoreCoursesButton) {
-      loadMoreCoursesButton.hidden = processedCourses.length <= state.visibleCount;
+      loadMoreCoursesButton.hidden =
+        processedCourses.length <= state.visibleCount;
     }
   };
 

@@ -1426,6 +1426,65 @@ h2 {
   width: 18px;
 }
 
+.unavailable-popup[hidden] {
+  display: none;
+}
+
+.unavailable-popup {
+  align-items: center;
+  background: rgba(18, 15, 45, 0.62);
+  display: flex;
+  inset: 0;
+  justify-content: center;
+  padding: 1rem;
+  position: fixed;
+  z-index: 60;
+}
+
+.unavailable-popup-card {
+  background: radial-gradient(circle at top right, #fff4f6 0, #fff 52%, #f7f6ff 100%);
+  border: 1px solid #f0deea;
+  border-radius: 18px;
+  box-shadow: 0 28px 70px rgba(19, 15, 45, 0.26);
+  max-width: 460px;
+  padding: 1.25rem;
+  position: relative;
+  width: min(100%, 460px);
+}
+
+.unavailable-popup-card h2 {
+  font-size: clamp(1.35rem, 4vw, 1.75rem);
+  margin-bottom: 0.45rem;
+  padding-right: 2.2rem;
+}
+
+.unavailable-popup-card p {
+  color: var(--ink-soft);
+  font-size: 0.95rem;
+}
+
+.developer-contact-list {
+  display: grid;
+  gap: 0.35rem;
+  margin-top: 0.85rem;
+}
+
+.developer-contact-list a {
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  color: var(--ink);
+  font-size: 0.88rem;
+  font-weight: 700;
+  overflow-wrap: anywhere;
+  padding: 0.55rem 0.65rem;
+}
+
+.developer-contact-list a:hover {
+  border-color: #ffc5ce;
+  color: var(--accent);
+}
+
 .contact-dialog-card {
   max-height: calc(100vh - 1.2rem);
   max-width: 500px;
@@ -1911,6 +1970,96 @@ h2 {
   font-weight: 700;
 }
 
+.notes-request-form {
+  display: grid;
+  gap: 0.6rem;
+  margin-top: 0.65rem;
+}
+
+.notes-credit-box {
+  background: #fff8eb;
+  border: 1px solid #ffe0a3;
+  border-radius: 10px;
+  color: #775115;
+  display: grid;
+  gap: 0.12rem;
+  padding: 0.55rem 0.65rem;
+}
+
+.notes-credit-box strong {
+  color: #4d3510;
+  font-size: 0.78rem;
+}
+
+.notes-credit-box span {
+  font-size: 0.72rem;
+  line-height: 1.45;
+}
+
+.notes-picker {
+  border: 0;
+  display: grid;
+  gap: 0.45rem;
+  margin: 0;
+  padding: 0;
+}
+
+.notes-picker legend {
+  color: var(--ink);
+  font-size: 0.84rem;
+  font-weight: 800;
+}
+
+.notes-checkbox-grid {
+  display: grid;
+  gap: 0.45rem;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  max-height: 230px;
+  overflow-y: auto;
+  padding-right: 0.15rem;
+}
+
+.note-option {
+  align-items: flex-start;
+  background: #fff;
+  border: 1px solid #e5e1f1;
+  border-radius: 10px;
+  cursor: pointer;
+  display: flex;
+  gap: 0.45rem;
+  min-width: 0;
+  padding: 0.52rem 0.58rem;
+}
+
+.note-option:has(input:checked) {
+  background: #fff4f6;
+  border-color: #ffc5ce;
+}
+
+.note-option input {
+  accent-color: var(--accent);
+  flex: 0 0 auto;
+  margin-top: 0.18rem;
+}
+
+.note-option span {
+  display: grid;
+  gap: 0.12rem;
+  min-width: 0;
+}
+
+.note-option strong {
+  color: var(--ink);
+  font-size: 0.76rem;
+  line-height: 1.25;
+}
+
+.note-option small {
+  color: var(--ink-soft);
+  font-size: 0.66rem;
+  line-height: 1.35;
+}
+
 .free-course-contact {
   margin-top: 0.6rem;
 }
@@ -2343,6 +2492,15 @@ h2 {
     grid-template-columns: 1fr;
   }
 
+  .notes-checkbox-grid {
+    grid-template-columns: 1fr;
+    max-height: 210px;
+  }
+
+  .unavailable-popup-card {
+    padding: 1rem;
+  }
+
   .course-meta-grid {
     grid-template-columns: 1fr;
   }
@@ -2613,106 +2771,4 @@ h2 {
   .section-cta .ghost-btn {
     width: 100%;
   }
-/* One-to-One Classes Page Styles */
-.feature-card {
-  background: var(--surface);
-  padding: 2rem 1.5rem;
-  border-radius: 12px;
-  border: 1px solid var(--line);
-  text-align: center;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-.feature-card:hover {
-  transform: translateY(-4px);
-  box-shadow: var(--shadow);
-}
-
-.feature-icon {
-  font-size: 2.5rem;
-  margin-bottom: 1rem;
-}
-
-.feature-card h3 {
-  font-size: 1.1rem;
-  margin-bottom: 0.5rem;
-  color: var(--ink);
-}
-
-.feature-card p {
-  font-size: 0.9rem;
-  color: var(--ink-soft);
-}
-
-.course-features-list {
-  list-style: none;
-  margin: 1rem 0;
-  padding: 0;
-  font-size: 0.85rem;
-  color: var(--ink-soft);
-}
-
-.course-features-list li {
-  padding: 0.25rem 0;
-  display: flex;
-  align-items: flex-start;
-  gap: 0.5rem;
-}
-
-.course-features-list li::before {
-  content: "✓";
-  color: var(--accent);
-  font-weight: bold;
-  flex-shrink: 0;
-}
-
-.course-instructor {
-  font-size: 0.9rem;
-  color: var(--ink-soft);
-  margin-bottom: 0.5rem;
-  font-style: italic;
-}
-
-.course-contact-btn {
-  width: 100%;
-}
-
-/* Responsive adjustments */
-@media (max-width: 768px) {
-  .features-grid {
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)) !important;
-    gap: 1.5rem !important;
-  }
-  
-  .course-grid {
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)) !important;
-    gap: 1.5rem !important;
-  }
-  
-  .feature-card {
-    padding: 1.5rem 1rem;
-  }
-  
-  .courses-hero h1 {
-    font-size: clamp(1.8rem, 5vw, 2.5rem);
-  }
-  
-  .courses-hero .hero-text {
-    font-size: 0.95rem;
-  }
-}
-
-@media (max-width: 480px) {
-  .features-grid {
-    grid-template-columns: 1fr !important;
-  }
-  
-  .course-grid {
-    grid-template-columns: 1fr !important;
-  }
-  
-  .section-cta div {
-    padding: 0 1rem;
-  }
-}
 }
