@@ -34,11 +34,16 @@ const courseCatalog = Array.isArray(window.courseCatalog)
   : [];
 
 let activeDialog = null;
-const EMAILJS_SERVICE_ID = "service_5xb7nfk";
-const EMAILJS_TEMPLATE_ID = "template_79ynf38";
-const EMAILJS_PUBLIC_KEY = "QiezyPTWzynbAWbeW";
+const EMAILJS_SERVICE_ID = "service_n8av1y6";
+const EMAILJS_TEMPLATE_ID = "template_ltlyo7k";
+const EMAILJS_PUBLIC_KEY = "8CnLp23zcYITaRpu3";
+
 const UPI_ID = "9518816505-2@ybl";
 const UPI_RECEIVER_NAME = "ScholarShayata";
+const DEVELOPER_CONTACT_PHONE = "+91 95188 16505";
+const DEVELOPER_CONTACT_PHONE_LINK = "tel:+919518816505";
+const DEVELOPER_CONTACT_EMAIL = "iamharshindian015@gmail.com";
+const DEVELOPER_CONTACT_INSTAGRAM = "https://www.instagram.com/harshxindian";
 let emailJsReady = false;
 
 const initEmailJs = () => {
@@ -90,6 +95,14 @@ const escapeHtml = (value) =>
 
 const formatAmount = (value) =>
   Number(value || 0).toLocaleString("en-IN", { maximumFractionDigits: 0 });
+
+const getCourseNotes = (course) =>
+  Array.isArray(course?.details?.notes) ? course.details.notes : [];
+
+const buildNotesSearchText = (course) =>
+  getCourseNotes(course)
+    .map((note) => `${note.title || ""} ${note.source || ""}`)
+    .join(" ");
 
 const buildContactMessageBody = ({
   requestType,
@@ -184,7 +197,7 @@ const renderPlaceholderCard = (index) => `
 `;
 
 const buildCourseSearchText = (course) =>
-  `${course.title} ${course.instructor} ${course.category} ${course.tag} ${course.description}`.toLowerCase();
+  `${course.title} ${course.instructor} ${course.category} ${course.tag} ${course.description} ${buildNotesSearchText(course)}`.toLowerCase();
 
 const renderFeaturedCourses = (sourceCourses = courseCatalog) => {
   if (!featuredCoursesGrid) return;
@@ -357,6 +370,94 @@ const openDialog = (dialogName) => {
       message.classList.remove("success", "error");
     }
   }
+};
+
+const getUnavailablePopup = () => {
+  let popup = document.querySelector("[data-unavailable-popup]");
+  if (popup) return popup;
+
+  popup = document.createElement("div");
+  popup.className = "unavailable-popup";
+  popup.setAttribute("data-unavailable-popup", "");
+  popup.hidden = true;
+  popup.innerHTML = `
+    <article class="unavailable-popup-card" role="dialog" aria-modal="true" aria-labelledby="unavailable-popup-title">
+      <button type="button" class="dialog-close" data-unavailable-close aria-label="Close popup">
+        &times;
+      </button>
+      <p class="eyebrow">Feature Update</p>
+      <h2 id="unavailable-popup-title">This button is not working right now</h2>
+      <p>
+        Please contact the developers for help or manual support.
+      </p>
+      <div class="developer-contact-list">
+        <a href="${DEVELOPER_CONTACT_PHONE_LINK}">${DEVELOPER_CONTACT_PHONE}</a>
+        <a href="mailto:${DEVELOPER_CONTACT_EMAIL}">${DEVELOPER_CONTACT_EMAIL}</a>
+        <a href="${DEVELOPER_CONTACT_INSTAGRAM}" target="_blank" rel="noopener noreferrer">@harshxindian</a>
+      </div>
+      <div class="dialog-contact-links">
+        <h3>Developer Contact</h3>
+        <div class="dialog-contact-icons">
+          <a
+            class="icon-link"
+            href="${DEVELOPER_CONTACT_PHONE_LINK}"
+            aria-label="Call ${DEVELOPER_CONTACT_PHONE}"
+            title="${DEVELOPER_CONTACT_PHONE}"
+          >
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M6.7 3.3 9.2 2l3 4.4-2.2 2.2a14.9 14.9 0 0 0 5.4 5.4l2.2-2.2 4.4 3-1.3 2.5a2.4 2.4 0 0 1-2.5 1.3c-7.2-1.2-12.8-6.8-14-14a2.4 2.4 0 0 1 1.3-2.3Z" />
+            </svg>
+          </a>
+          <a
+            class="icon-link"
+            href="mailto:${DEVELOPER_CONTACT_EMAIL}"
+            aria-label="Email ${DEVELOPER_CONTACT_EMAIL}"
+            title="${DEVELOPER_CONTACT_EMAIL}"
+          >
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <rect x="3" y="5" width="18" height="14" rx="2" />
+              <path d="m4 7 8 6 8-6" />
+            </svg>
+          </a>
+          <a
+            class="icon-link"
+            href="${DEVELOPER_CONTACT_INSTAGRAM}"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Instagram @harshxindian"
+            title="@harshxindian"
+          >
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <rect x="3" y="3" width="18" height="18" rx="5" />
+              <circle cx="12" cy="12" r="4.2" />
+              <circle cx="17.3" cy="6.7" r="1.1" />
+            </svg>
+          </a>
+        </div>
+      </div>
+    </article>
+  `;
+
+  popup.addEventListener("click", (event) => {
+    const target = event.target;
+    if (
+      target === popup ||
+      (target instanceof HTMLElement &&
+        target.closest("[data-unavailable-close]"))
+    ) {
+      popup.hidden = true;
+      document.body.classList.remove("dialog-open");
+    }
+  });
+
+  document.body.appendChild(popup);
+  return popup;
+};
+
+const openUnavailablePopup = () => {
+  const popup = getUnavailablePopup();
+  popup.hidden = false;
+  document.body.classList.add("dialog-open");
 };
 
 const detailsByTrack = {
@@ -736,6 +837,8 @@ const renderCourseDetailsDialog = (course) => {
   const estimatedHours = Math.max(modules.length * 4, 20);
   const isFree =
     course.priceLabel?.toLowerCase() === "free" || Number(course.price) === 0;
+  const noteOptions = getCourseNotes(course);
+  const hasNoteRequest = noteOptions.length > 0;
   const priceDisplay = course.priceLabel
     ? escapeHtml(course.priceLabel)
     : `&#8377;${formatAmount(ourPrice)}`;
@@ -873,8 +976,127 @@ const renderCourseDetailsDialog = (course) => {
 
           <section class="course-wizard-slide" aria-label="Payment and direct contact">
             ${
-              isFree
+              hasNoteRequest
                 ? `
+            <article class="course-wizard-card course-payment-card">
+              <div class="payment-head">
+                <span class="payment-badge">Notes Request</span>
+                <h3>Select Handwritten Notes</h3>
+              </div>
+              <p>
+                Pick the notes you want and share one contact option. We mention source credits wherever a source name is available because this is for learning support, not for earning from someone else's work.
+              </p>
+              <form
+                class="notes-request-form"
+                data-notes-request-form
+                data-course-title="${escapeHtml(course.title)}"
+              >
+                <div class="notes-credit-box">
+                  <strong>Credit note</strong>
+                  <span>
+                    Source names are displayed only to give proper credit to the original note creators.
+                  </span>
+                </div>
+
+                <fieldset class="notes-picker">
+                  <legend>Select notes</legend>
+                  <div class="notes-checkbox-grid">
+                    ${noteOptions
+                      .map(
+                        (note, index) => `
+                    <label class="note-option">
+                      <input
+                        type="checkbox"
+                        name="selected_notes"
+                        value="${escapeHtml(note.title)}"
+                        data-note-source="${escapeHtml(note.source || "")}"
+                      />
+                      <span>
+                        <strong>${escapeHtml(note.title)}</strong>
+                        <small>${
+                          note.source
+                            ? `Credit/source: ${escapeHtml(note.source)}`
+                            : "Source credit unavailable"
+                        }</small>
+                      </span>
+                    </label>
+                    `,
+                      )
+                      .join("")}
+                  </div>
+                </fieldset>
+
+                <fieldset class="contact-method notes-method">
+                  <legend>Receive On</legend>
+                  <label class="contact-method-option">
+                    <input
+                      type="radio"
+                      name="notes_contact_method"
+                      value="email"
+                      checked
+                      required
+                    />
+                    <span>Email</span>
+                  </label>
+                  <label class="contact-method-option">
+                    <input
+                      type="radio"
+                      name="notes_contact_method"
+                      value="phone"
+                      required
+                    />
+                    <span>WhatsApp Number</span>
+                  </label>
+                </fieldset>
+
+                <label class="form-field" data-notes-field="email">
+                  <span>Email Address *</span>
+                  <input
+                    type="email"
+                    name="notes_email"
+                    placeholder="Enter your email"
+                    autocomplete="email"
+                    required
+                  />
+                </label>
+
+                <label class="form-field" data-notes-field="phone" hidden>
+                  <span>WhatsApp Number</span>
+                  <input
+                    type="tel"
+                    name="notes_phone"
+                    placeholder="Enter your WhatsApp number"
+                    inputmode="numeric"
+                    pattern="[0-9]{10}"
+                  />
+                </label>
+
+                <button type="submit" class="solid-btn free-course-btn">
+                  Submit Notes Request
+                </button>
+                <p class="free-course-message" data-notes-message aria-live="polite">
+                  &nbsp;
+                </p>
+              </form>
+              <div class="free-course-contact">
+                <a
+                  class="whatsapp-link"
+                  href="https://wa.me/919518816505"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <svg viewBox="0 0 24 24" aria-hidden="true">
+                    <path
+                      d="M12 4a7 7 0 0 0-6.1 10.4L5 20l5.7-1.6A7 7 0 1 0 12 4Zm0 12.7c-1.2 0-2.3-.3-3.2-.9l-.2-.1-3.4 1 1-3.3-.1-.2a5.7 5.7 0 1 1 10.1 1.2c-1 1.4-2.7 2.3-4.8 2.3Zm3.4-4.6c-.2-.1-1.2-.6-1.4-.7-.2-.1-.4-.1-.6.1l-.5.7c-.1.2-.2.2-.4.1-.2-.1-.7-.3-1.3-.9-.5-.5-.9-1.1-1-1.3-.1-.2 0-.3.1-.4l.3-.4.2-.3c.1-.1.1-.3 0-.4l-.6-1.4c-.1-.3-.3-.2-.4-.2h-.5c-.1 0-.3 0-.4.2-.1.2-.6.6-.6 1.5s.6 1.8.7 1.9c.1.1 1.2 1.8 2.9 2.5.4.2.7.3 1 .4.4.1.7.1 1 .1.3 0 .8-.3.9-.6.1-.3.1-.5.1-.6 0-.1-.2-.2-.4-.3Z"
+                    />
+                  </svg>
+                  <span>Chat on WhatsApp</span>
+                </a>
+              </div>
+            </article>
+            `
+                : isFree
+                  ? `
             <article class="course-wizard-card course-payment-card">
               <div class="payment-head">
                 <span class="payment-badge">Free Access</span>
@@ -885,7 +1107,7 @@ const renderCourseDetailsDialog = (course) => {
               </p>
               <form class="free-course-form" data-free-course-form>
                 <label class="free-course-field">
-                  <span>Email Address</span>
+                  <span>Email Address * </span>
                   <input
                     type="email"
                     name="free_email"
@@ -918,7 +1140,7 @@ const renderCourseDetailsDialog = (course) => {
               </div>
             </article>
             `
-                : `
+                  : `
             <article class="course-wizard-card course-payment-card">
               <div class="payment-head">
                 <span class="payment-badge">Secure Checkout</span>
@@ -969,7 +1191,7 @@ const renderCourseDetailsDialog = (course) => {
                   </fieldset>
 
                   <label class="form-field" data-upi-field="email">
-                    <span>Email Address</span>
+                    <span>Email Address * </span>
                     <input
                       type="email"
                       name="upi_email"
@@ -1212,6 +1434,19 @@ if (dialogs.length > 0) {
       }
     }
 
+    const unavailablePopup = document.querySelector("[data-unavailable-popup]");
+    if (
+      event.key === "Escape" &&
+      unavailablePopup &&
+      !unavailablePopup.hidden
+    ) {
+      unavailablePopup.hidden = true;
+      if (!activeDialog) {
+        document.body.classList.remove("dialog-open");
+      }
+      return;
+    }
+
     if (event.key === "Escape" && activeDialog) {
       closeDialog(activeDialog);
     }
@@ -1331,9 +1566,7 @@ if (contactForm) {
 
     try {
       const templateId =
-        requestType === "general"
-          ? EMAILJS_TEMPLATE_ID
-          : EMAILJS_PAYMENT_TEMPLATE_ID;
+        requestType === "general" ? EMAILJS_TEMPLATE_ID : EMAILJS_TEMPLATE_ID;
       await window.emailjs.send(EMAILJS_SERVICE_ID, templateId, {
         form_title: payload.form_title || "We will contact you ASAP",
         name: payload.name || "",
@@ -1401,6 +1634,46 @@ const updateUpiContactField = (form) => {
   if (phoneInput) phoneInput.required = !useEmail;
 };
 
+const updateNotesContactField = (form) => {
+  const selectedMethod =
+    form.querySelector('input[name="notes_contact_method"]:checked')?.value ||
+    "email";
+  const useEmail = selectedMethod === "email";
+  const emailField = form.querySelector('[data-notes-field="email"]');
+  const phoneField = form.querySelector('[data-notes-field="phone"]');
+  const emailInput = emailField ? emailField.querySelector("input") : null;
+  const phoneInput = phoneField ? phoneField.querySelector("input") : null;
+
+  if (emailField) emailField.hidden = !useEmail;
+  if (phoneField) phoneField.hidden = useEmail;
+  if (emailInput) emailInput.required = useEmail;
+  if (phoneInput) phoneInput.required = !useEmail;
+};
+
+const buildNotesRequestMessageBody = ({
+  selectedNotes,
+  contactMethod,
+  email,
+  phone,
+}) => {
+  const noteLines = selectedNotes.map((note, index) => {
+    const sourceText = note.source ? ` (Credit/source: ${note.source})` : "";
+    return `${index + 1}. ${note.title}${sourceText}`;
+  });
+
+  return [
+    "Request type: handwritten notes",
+    `Preferred contact: ${contactMethod}`,
+    `Email: ${email || "N/A"}`,
+    `Phone/WhatsApp: ${phone || "N/A"}`,
+    "",
+    "Selected notes:",
+    ...noteLines,
+    "",
+    "Credit note: Source names are included wherever available to give proper credit. ScholarShayata is using this request for student learning support, not for earning from someone else's work.",
+  ].join("\n");
+};
+
 const buildUpiLink = (courseTitle, amount) => {
   const numericAmount = Number(amount || 0).toFixed(2);
   const params = new URLSearchParams({
@@ -1417,18 +1690,33 @@ document.addEventListener("change", (event) => {
   const target = event.target;
   if (!(target instanceof HTMLElement)) return;
   const form = target.closest("[data-upi-form]");
-  if (!form) return;
   if (
-    target.matches('input[name="upi_contact_method"]') ||
-    target.closest('input[name="upi_contact_method"]')
+    form &&
+    (target.matches('input[name="upi_contact_method"]') ||
+      target.closest('input[name="upi_contact_method"]'))
   ) {
     updateUpiContactField(form);
   }
+
+  const notesForm = target.closest("[data-notes-request-form]");
+  if (
+    notesForm &&
+    (target.matches('input[name="notes_contact_method"]') ||
+      target.closest('input[name="notes_contact_method"]'))
+  ) {
+    updateNotesContactField(notesForm);
+  }
 });
 
-document.addEventListener("submit", (event) => {
+document.addEventListener("submit", async (event) => {
   const target = event.target;
   if (!(target instanceof HTMLFormElement)) return;
+  if (target.matches("[data-unavailable-form]")) {
+    event.preventDefault();
+    openUnavailablePopup();
+    return;
+  }
+
   if (target.matches("[data-upi-form]")) {
     event.preventDefault();
     updateUpiContactField(target);
@@ -1512,7 +1800,7 @@ document.addEventListener("submit", (event) => {
     }
 
     window.emailjs
-      .send(EMAILJS_SERVICE_ID, EMAILJS_PAYMENT_TEMPLATE_ID, {
+      .send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {
         form_title: "UPI Payment Request",
         course_title: courseTitle,
         course_price: coursePrice,
@@ -1543,6 +1831,141 @@ document.addEventListener("submit", (event) => {
       });
     return;
   }
+
+  if (target.matches("[data-notes-request-form]")) {
+    event.preventDefault();
+    updateNotesContactField(target);
+
+    const message = target.querySelector("[data-notes-message]");
+    const submitButton = target.querySelector('button[type="submit"]');
+    const submitButtonLabel = submitButton
+      ? submitButton.textContent
+      : "Submit Notes Request";
+    const selectedCheckboxes = Array.from(
+      target.querySelectorAll('input[name="selected_notes"]:checked'),
+    );
+
+    if (selectedCheckboxes.length === 0) {
+      if (message) {
+        message.textContent = "Please select at least one note.";
+        message.classList.remove("success");
+        message.classList.add("error");
+      }
+      return;
+    }
+
+    if (!target.checkValidity()) {
+      target.reportValidity();
+      if (message) {
+        message.textContent = "Please enter a valid email or WhatsApp number.";
+        message.classList.remove("success");
+        message.classList.add("error");
+      }
+      return;
+    }
+
+    initEmailJs();
+    if (!emailJsReady) {
+      if (message) {
+        message.textContent =
+          "Email service not ready. Please refresh and try again.";
+        message.classList.remove("success");
+        message.classList.add("error");
+      }
+      return;
+    }
+
+    const selectedMethod =
+      target.querySelector('input[name="notes_contact_method"]:checked')
+        ?.value || "email";
+    const emailValue =
+      target.querySelector('input[name="notes_email"]')?.value || "";
+    const phoneValue =
+      target.querySelector('input[name="notes_phone"]')?.value || "";
+    const contactValue = selectedMethod === "phone" ? phoneValue : emailValue;
+    const selectedNotes = selectedCheckboxes.map((checkbox) => ({
+      title: checkbox.value,
+      source: checkbox.dataset.noteSource || "",
+    }));
+    const selectedNotesText = selectedNotes
+      .map((note, index) => {
+        const sourceText = note.source
+          ? ` (Credit/source: ${note.source})`
+          : "";
+        return `${index + 1}. ${note.title}${sourceText}`;
+      })
+      .join("\n");
+    const messageSubject = "Handwritten Notes Request - ScholarShayata";
+    const messageBody = buildNotesRequestMessageBody({
+      selectedNotes,
+      contactMethod: selectedMethod,
+      email: emailValue,
+      phone: phoneValue,
+    });
+
+    if (submitButton) {
+      submitButton.disabled = true;
+      submitButton.textContent = "Sending...";
+    }
+    if (message) {
+      message.textContent = "Sending your notes request...";
+      message.classList.remove("success", "error");
+    }
+
+    try {
+      await window.emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {
+        form_title: "Handwritten Notes Request",
+        name: "Notes requester",
+        gender: "",
+        contact_method: selectedMethod,
+        email: emailValue,
+        phone: phoneValue,
+        contact_value: contactValue,
+        request_type: "notes",
+        course_title: target.dataset.courseTitle || "Handwritten Notes Library",
+        course_price: "Free Request",
+        payment_method: "No payment",
+        message_subject: messageSubject,
+        message_body: messageBody,
+        selected_notes: selectedNotesText,
+        notes_list: selectedNotesText,
+      });
+
+      if (message) {
+        message.textContent =
+          selectedMethod === "phone"
+            ? "Thanks. Your notes request was sent. We will contact you on WhatsApp soon."
+            : "Thanks. Your notes request was sent. We will contact you by email soon.";
+        message.classList.remove("error");
+        message.classList.add("success");
+      }
+
+      target.reset();
+      const defaultMethod = target.querySelector(
+        'input[name="notes_contact_method"][value="email"]',
+      );
+      if (defaultMethod) {
+        defaultMethod.checked = true;
+      }
+      updateNotesContactField(target);
+    } catch (error) {
+      if (message) {
+        message.textContent =
+          error?.text ||
+          error?.message ||
+          "Unable to send notes request. Please try again.";
+        message.classList.remove("success");
+        message.classList.add("error");
+      }
+    } finally {
+      if (submitButton) {
+        submitButton.disabled = false;
+        submitButton.textContent = submitButtonLabel;
+      }
+    }
+    return;
+  }
+
   if (!target.matches("[data-free-course-form]")) return;
 
   event.preventDefault();
